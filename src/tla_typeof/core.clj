@@ -8,12 +8,17 @@
   [v]
   ;; `->` is the pipeline operator.
   (-> v
-      type                        ; Here we get the type of the value.
-      str ; Stringify it (now a Integer is `"class tlc2.value.impl.IntegerValue"`).
-      (str/split #"\.") ; Then we dot split it, `[]"class" ...  "..." ... "IntegerValue"]`.
-      last              ; Get the last element, "IntegerValue".
+      ;; Here we get the type of the value.
+      type
+      ;; Stringify it (now a Integer is "class tlc2.value.impl.IntegerValue").
+      str
+      ;; Then we dot split it, ["class" ...  "..." ... "IntegerValue"].
+      (str/split #"\.")
+      ;; Get the last element, "IntegerValue".
+      last
       (str/split #"Value")
-      first                   ; Get rid of `Value` suffix, `"Integer"`.
+      ;; Get rid of `Value` suffix, "Integer".
+      first
       ;; And finally convert back to a String which TLC understands.
       edn/to-tla-value))
 
