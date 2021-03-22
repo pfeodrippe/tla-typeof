@@ -12,7 +12,7 @@
       type
       ;; Stringify it (now a Integer is "class tlc2.value.impl.IntegerValue").
       str
-      ;; Then we dot split it, ["class" ...  "..." ... "IntegerValue"].
+      ;; Then we dot split it, ["class ...  "..." ... "IntegerValue"].
       (str/split #"\.")
       ;; Get the last element, "IntegerValue".
       last
