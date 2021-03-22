@@ -13,7 +13,10 @@ Init ==
     ]  /\ y = 0
 
 Next ==
-    y' = y + 1
+    /\ y' = y + 1
+    /\ x' = [x EXCEPT !["a"] = IF TypeOf(x["a"]) = "String"
+                                THEN 3
+                                ELSE "Olha"]
 
 Invariant ==
     y < 3

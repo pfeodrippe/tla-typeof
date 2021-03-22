@@ -1,0 +1,80 @@
+= TLA Edn Usage
+
+Here we are going to create a new operator based on
+link:https://twitter.com/lemmster/status/1365024900465893376?s=20[this iteraction
+between @lemmy and @hwayne] called `TypeOf`. It will be a quick discussion.
+
+You should know at least a lit bit of TLA+. For Clojure, there are toons of documentation
+over there, so feel free to read them.
+
+This will be an overrided operator using link:https://github.com/pfeodrippe/tla-edn[tla-edn]
+which returns the value type (just a string here). Of course, for such an simple example,
+you could use Java with no problem, but we want to show the usage, so keep your disbelief
+suspended for now.
+
+Start the REPL and evaluate the `spec/run` line inside `comment`, you should have something like
+
+[source, clojure]
+----
+["TLC2 Version 2.15 of Day Month 20??"
+ "Running breadth-first search Model-Checking with fp 101 and seed -8784868898657545149 with 1 worker on 16 cores with 16384MB heap and 64MB offheap memory (Mac OS X 10.16 x86_64, Eclipse OpenJ9 1.8.0_275 x86_64, MSBDiskFPSet, DiskStateQueue)."
+ "Parsing file /Users/paulo.feodrippe/dev/tla-typeof/Example/Eita.tla"
+ "Parsing file /private/var/folders/6r/vx4stgxd5yg6pbv_t_b2wttw0000gp/T/Integers.tla (jar:file:/Users/paulo.feodrippe/.m2/repository/pfeodrippe/tla-edn/0.6.0-SNAPSHOT/tla-edn-0.6.0-SNAPSHOT.jar!/tla2sany/StandardModules/Integers.tla)"
+ "Parsing file /Users/paulo.feodrippe/dev/tla-typeof/Example/Types.tla"
+ "Parsing file /private/var/folders/6r/vx4stgxd5yg6pbv_t_b2wttw0000gp/T/Naturals.tla (jar:file:/Users/paulo.feodrippe/.m2/repository/pfeodrippe/tla-edn/0.6.0-SNAPSHOT/tla-edn-0.6.0-SNAPSHOT.jar!/tla2sany/StandardModules/Naturals.tla)"
+ "Semantic processing of module Naturals"
+ "Semantic processing of module Integers"
+ "Semantic processing of module Types"
+ "Semantic processing of module Eita"
+ "Starting... (2021-03-22 01:18:06)"
+ "Loading TypeOf operator override from tlc2.overrides.Operator_TypeOf_108969660 with signature: <Java Method: public static java.lang.Object tlc2.overrides.Operator_TypeOf_108969660.TypeOf(java.lang.Object)>."
+ "Computing initial states..."
+ "Finished computing initial states: 1 distinct state generated at 2021-03-22 01:18:06."
+ "Error: Invariant Invariant is violated."
+ "Error: The behavior up to this point is:"
+ "State 1: <Initial predicate>"
+ "/\\ typeA = \"Int\""
+ "/\\ typeB = \"String\""
+ "/\\ typeC = \"Tuple\""
+ "/\\ typeD = \"Record\""
+ ""
+ "State 2: <Next line 16, col 5 to line 19, col 45 of module Eita>"
+ "/\\ typeA = \"String\""
+ "/\\ typeB = \"String\""
+ "/\\ typeC = \"Tuple\""
+ "/\\ typeD = \"Record\""
+ ""
+ "State 3: <Next line 16, col 5 to line 19, col 45 of module Eita>"
+ "/\\ typeA = \"Int\""
+ "/\\ typeB = \"String\""
+ "/\\ typeC = \"Tuple\""
+ "/\\ typeD = \"Record\""
+ ""
+ "State 4: <Next line 16, col 5 to line 19, col 45 of module Eita>"
+ "/\\ typeA = \"String\""
+ "/\\ typeB = \"String\""
+ "/\\ typeC = \"Tuple\""
+ "/\\ typeD = \"Record\""
+ ""
+ "4 states generated, 4 distinct states found, 0 states left on queue."
+ "The depth of the complete state graph search is 4."
+ "Finished in 00s at (2021-03-22 01:18:06)"
+ "Trace exploration spec path: /Users/paulo.feodrippe/dev/tla-typeof/Example/Eita_TTrace.tla"]
+----
+
+If you look at the example module used link:Example/Eita.tla[Eita.tla], you will
+see that it prints the types of the map `x` (see the `ALIAS` in the config file),
+`"a"` keeps switching its type, first it's a Integer, then a String, back to
+Integer etc and you can see it in the output.
+
+You can also use it outside the REPL, for it you `make build` (make sure that you had
+run it with the REPL to generate the classes) which generates `target/tla-typeof.jar`.
+Enter in the `Example` folder and run
+
+[source, bash]
+----
+# `TLA-EDN-Namespaces` is a system property where you say the namespaces that you want
+# to use. The classes are generated based on these namespaces. We could insert some file
+# while building which would contain these classes, but let's not be so clever for now.
+java -cp /path/to/tlc:../target/tla-typeof.jar -DTLA-EDN-Namespaces=tla-typeof.core tlc2.TLC Eita
+----
