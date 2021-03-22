@@ -4,7 +4,7 @@ Here we are going to create a new operator based on
 link:https://twitter.com/lemmster/status/1365024900465893376?s=20[this iteraction
 between @lemmy and @hwayne] called `TypeOf`. It will be a quick discussion.
 
-You should know at least a lit bit of TLA+. For Clojure, there are toons of documentation
+You should know at least a little bit of TLA+. For Clojure, there are toons of documentation
 over there, so feel free to read them.
 
 This will be an overrided operator using link:https://github.com/pfeodrippe/tla-edn[tla-edn]
@@ -78,3 +78,7 @@ Enter in the `Example` folder and run
 # while building which would contain these classes, but let's not be so clever for now.
 java -cp /path/to/tlc:../target/tla-typeof.jar -DTLA-EDN-Namespaces=tla-typeof.core tlc2.TLC Eita
 ----
+
+Yes, the jar is huge (~ 5.5 MB), but for a toy example and using Clojure, I don't
+care about it here (and who cares about size nowadays regarding libraries (outside
+the browser, of course)?)
